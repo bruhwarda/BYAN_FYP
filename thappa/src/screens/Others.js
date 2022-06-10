@@ -1,6 +1,6 @@
 import React from 'react'
 import { ScrollView,View,StyleSheet,Text } from 'react-native';
-import { Avatar, Button, Card, Title, Paragraph,Image } from 'react-native-paper';
+import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 const LeftContent = props => <Avatar.Icon {...props} icon="charity" />
 const Others = ({navigation}) => {

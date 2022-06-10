@@ -5,15 +5,23 @@ import {
   StyleSheet,
   TextInput,
   ToastAndroid,
-  Image} from "react-native";
+  Image,
+  Alert,
+  ActivityIndicator,
+  TouchableOpacity,
+  Dimensions} from "react-native";
 import {Picker} from "@react-native-picker/picker";
 import { Button } from "react-native-paper";
+import storage from "@react-native-firebase/storage";
 import * as ImagePicker from "expo-image-picker";
+const {width} = Dimensions.get("screen")
 const Upload = () => {
   const [Pic, setPic] = useState(null);
   const [selectedLanguage, setSelectedLanguage] = useState();
   const [productPrice, setProductPrice] = useState("");
   const [productCharity, setProductCharity] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [transferred, setTransferred] = useState(0);
   const setToastMsg = (msg) => {
     ToastAndroid.showWithGravity(msg, ToastAndroid.SHORT, ToastAndroid.CENTER);
   };
@@ -38,7 +46,44 @@ const Upload = () => {
       setPic(result.uri);
     }
   };
-  const NameAlert = (price,charity,ngo) =>
+  //to upload the image to firebase
+  const submitPost = async () => {
+
+    const uploadUri = Pic;
+    let filename = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
+     const task= storage().ref(filename).putFile(uploadUri);
+//add timestamp to file name
+     const extension = filename.split('.').pop(); 
+     const name = filename.split('.').slice(0, -1).join('.');
+     filename = name + Date.now() + '.' + extension;
+
+     setUploading(true);
+     setTransferred(0);
+
+//set transferred state
+     task.on('state_changed', (taskSnapshot) => {
+      console.log(
+        `${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`,
+      );
+
+      setTransferred(
+        Math.round(taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) *
+          100,
+      );
+    });
+
+
+try{
+  await task;
+  setUploading(false);
+  Alert.alert('Image uploaded', 'Your image is uploaded to cloud storage successfully!!');
+}catch(e){
+  console.log(e);
+  
+}
+setPic(null);
+  }
+  {/*const NameAlert = (price,charity) =>
   Alert.alert(
     "Product Price Confirmation",
     "Is " +price+ " Correct Product Price",
@@ -59,14 +104,15 @@ const Upload = () => {
           }),
       },
     ]
-  );
-  const submit = () => {
-    if ( productPrice && productCharity) {
+  );*/}
+ const submit = () => {
+    {/*if ( productPrice && productCharity) {
       NameAlert(productPrice);
       NameAlert(productCharity);
     } else {
-      alert("All fields are mandatory");
-    }
+     alert("All fields are mandatory");
+    }*/}
+    alert("Your Data is Saved successfully");
   };
 
   return (
@@ -84,6 +130,7 @@ const Upload = () => {
         </TouchableHighlight>
        
       </View> */}
+      
 
       <View
         style={{
@@ -141,9 +188,16 @@ const Upload = () => {
   <Picker.Item label="Dar-ul-Aman" value="dua" />
 </Picker>
 <View>
-<TouchableOpacity style={styles.buttonStyle} onPress={() => submit()}>
-        <Text style={styles.buttonText}>SUBMIT</Text>
+        {uploading ? (
+          <View style={styles.StatusWrapper}>
+            <Text>{transferred} % Completed!</Text>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        ) :(
+<TouchableOpacity style={styles.buttonStyle} onPress={submitPost}>
+        <Text style={styles.buttonText}>SAVE</Text>
       </TouchableOpacity>
+        )}
 </View>
        
 </View>
@@ -179,6 +233,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontSize: 14,
     marginBottom: 10,
+  },
+  StatusWrapper:{
+    justifyContent: "center",
+    alignItems: "center",
   },
   labels: {
     fontSize: 14,

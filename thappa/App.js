@@ -7,7 +7,7 @@ import NfCarddet from"./src/components/NetflixCard";
 import Box from "./src/screens/Box";
 import Counter from "./src/screens/Counter";
 import HookEffect from "./src/screens/HookEffect";*/}
-import React from "react";
+import React,{useState} from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
  import ContactYoutube from "./src/screens/ContactYoutube";
@@ -33,7 +33,38 @@ import ChooseNgo from "./src/screens/chooseNgo";
 import Upload from "./src/screens/upload";
 import Wear1 from "./src/screens/Wear1";
 import Furniture1 from "./src/screens/Furniture1";
+import firebase from "firebase/app";
+import "firebase/auth";
 const App = () => {
+
+const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAbX8rKEbpUP4WqWW4WZ9lIMR2vrEOJacA",
+    authDomain: "my-first-project-d4d9d.firebaseapp.com",
+    projectId: "my-first-project-d4d9d",
+    storageBucket: "my-first-project-d4d9d.appspot.com",
+    messagingSenderId: "315423632252",
+    appId: "1:315423632252:web:891251cdaa6279e5d552f9",
+    measurementId: "G-CNNF2SRJXP"
+  };
+ //Checking if firebase has been initialized
+ if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app();
+}
+
+
+firebase.auth().onAuthStateChanged((user) => {
+  console.log("üser=>",user)
+  if (user != null) {
+    setIsLoggedIn(true)
+  } else {
+    setIsLoggedIn(false);
+  }
+});
+
  const Stack = createNativeStackNavigator();
  const navOptionHandler=()=>({
    headerShown:false
@@ -66,7 +97,7 @@ name="cash" component={Money}/>
 <Stack.Screen 
 name="image" component={Upload}/>
 <Stack.Screen 
-name="Buy" component={Buy}/>
+name="buy" component={Buy}/>
 <Stack.Screen 
 name="Sell" component={Sell}/>
 <Stack.Screen 
@@ -77,14 +108,10 @@ name="Furniture1" component={Furniture1}/>
 name="Others" component={Others}/>
 <Stack.Screen 
 name="Bedroom" component={Bedroom}/>
-
-
-
-
-{/*<Stack.Screen 
+<Stack.Screen 
 name="MenHome" component={DrawerNavigator} options={navOptionHandler}/>
 <Stack.Screen 
- name="WomenHome" component={DrawerNavigatorWoman} options={navOptionHandler}/>*/}
+ name="WomenHome" component={DrawerNavigatorWoman} options={navOptionHandler}/>
 <Stack.Screen 
 name="Cart" component={Cart}/>
 <Stack.Screen 

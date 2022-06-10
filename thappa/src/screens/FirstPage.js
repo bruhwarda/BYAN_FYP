@@ -1,8 +1,56 @@
 import React,{useState} from "react";
 import { Text,StyleSheet,View, TextInput,TouchableOpacity, Alert} from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import firebase from 'firebase/app';
+import "firebase/auth";
  const FirstPage= ({navigation}) =>{
-  const[userName,setUserName]=useState("");
+  const [userInfo, setUserInfo] = useState({
+    email: "",
+    password: "",
+    cpassword: ""
+})
+const isValidObjField =(obj) =>{
+   return  Object.values(obj).every(value => value.trim())
+}
+const updateError=(error,stateUpdater) =>{
+  stateUpdater(error);
+  setTimeout(() =>{
+stateUpdater('')
+  },4500);
+}
+const isValidEmail= (value) =>{
+  const regx =/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  return regx.test(value)
+}
+const{email,password,cpassword}= userInfo;
+
+function handleChange(value, eventName) {
+    setUserInfo({...userInfo,[eventName]: value })
+}
+const [error,setError]=useState("")
+ function submit() {
+    //const { email, pwd, pwd2 } = values
+if(!isValidObjField(userInfo)) return updateError('Required All Fields',setError)
+if(!isValidEmail(email)) return  updateError('Invalid Email',setError)
+if(!password.trim() || password.lenght < 8) return  updateError('Password less than 8 Characters',setError)
+    if (password==cpassword) {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(() => {
+              navigation.navigate("Login")
+            })
+            .catch((error) => {
+                alert(error.message)
+                // ..
+            });
+    } else {
+       Alert.alert("Passwords are different!")
+    }
+}
+
+
+
+
+{ /* const[userName,setUserName]=useState("");
 const[userEmail,setUserEmail]=useState("");
 const[userPassword,setUserPassword]=useState("");
  
@@ -14,42 +62,43 @@ const[userPassword,setUserPassword]=useState("");
       }else{
      Alert.alert(`incorrect`);
   }
-  };
+  }; */}
   return (
+   
 <View style={styles.mainContainer}>
+{error ? <Text style={styles.description}>{error}</Text>:null}
 <Text style={styles.mainHeader}>Sign Up</Text>
 <View style={{flexDirection:"row",alignSelf:"center"}}>
 <MaterialCommunityIcons name="charity" size={24} color="black"  /><Text style={styles.txt}>BUAN</Text>
 </View>
 <Text style={styles.description}>You can reach us anytime via BUAN@gmail.com</Text>
   <View style={styles.inputContainer}>
-<Text style={styles.labels}>Enter your Name</Text>
+<  Text style={styles.labels}>Enter your Email</Text>
   <TextInput  style={styles.inputStyle}
-autoCapitalize="none" 
+autoCapitalize="none"
+value={email} 
 autoCorrect={false}
-value={userName}
-onChangeText={(actualData)=>setUserName(actualData)}
+onChangeText={(value) => handleChange(value, "email")}
 />
 </View>
 <View style={styles.inputContainer}>
-<Text style={styles.labels}>Enter your Email</Text>
+<Text style={styles.labels}>Enter your Password</Text>
   <TextInput  style={styles.inputStyle}
 autoCapitalize="none" 
 autoCorrect={false}
-value={userEmail}
-
-onChangeText={(actualData)=>setUserEmail(actualData)}
+value={password}
+secureTextEntry={true} 
+ onChangeText={(value) => handleChange(value, "password")}
 />
 </View>
 <View style={styles.inputContainer}>
-<Text style={styles.labels}>Enter your password</Text>
+<Text style={styles.labels}>Confirm Your Password</Text>
  <TextInput  style={styles.inputStyle}
 autoCapitalize="none"  
 autoCorrect={false}
-SecureTextEntry={true}
-value={userPassword}
-
-onChangeText={(actualData)=>setUserPassword(actualData)}
+value={cpassword}
+secureTextEntry={true} 
+ onChangeText={(value) => handleChange(value, "cpassword")}
 />
 </View >
 

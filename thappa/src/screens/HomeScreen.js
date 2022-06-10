@@ -1,10 +1,10 @@
-import React from 'react';
-import { View, Text,StyleSheet,TouchableOpacity, ScrollView } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import React  from 'react';
+import { View, Text , StyleSheet ,TouchableOpacity , ScrollView } from 'react-native';
+import { MaterialCommunityIcons }  from '@expo/vector-icons';
 const HomeScreen = ({route,navigation}) => {
- const {myName}=route.params;
+ //const {myName}=route.params;
  const buy=()=>{
-  navigation.navigate("Buy");
+  navigation.navigate ("buy");
        };
   const sell=()=>{
   navigation.navigate("charity");
@@ -16,9 +16,9 @@ const HomeScreen = ({route,navigation}) => {
     <MaterialCommunityIcons name="charity" size={24} color="black"  /><Text style={styles.txt}>BUAN</Text>
   </View>
     <Text style={styles.description}>You can reach us anytime via @gmail.com</Text>
-      <Text style={styles.mainHeader}>
-          Welcome {myName}</Text>
-         </View>
+    {/*<Text style={styles.mainHeader}>
+        Welcome {myName}</Text>*/}
+    </View>
     <View>
     <Text style={styles.description}>
     You want to </Text>
@@ -35,24 +35,24 @@ const HomeScreen = ({route,navigation}) => {
   },
     ]}
       onPress={() => buy()} >
-    <Text tyle={styles.buttonText}>
-        Buy
-      </Text>
+
+     < Text style={styles.buttonText}> Buy </Text>
+
     </TouchableOpacity>
     <Text style={[
-      styles.buttonStyle,
-      {
+      styles.buttonStyle ,  {
         fontSize:20,
         color:"#7d7d7d",
        lineHeight:25,
-    },
+       paddingVertical:25,
+    }, 
     ]} >
     or
   </Text>
     <TouchableOpacity 
     style={[
       styles.buttonStyle,
-      {
+         {
     backgroundColor: "green"  ,
     paddingHorizontal:50,
     paddingVertical:15,
@@ -61,18 +61,19 @@ const HomeScreen = ({route,navigation}) => {
     ]}
      
    onPress={() => sell()} >
-    <Text tyle={styles.buttonText}>
+
+    <Text style={styles.buttonText}>
         Sell
       </Text>
     </TouchableOpacity>
      </View>
     </ScrollView>
-  )
-}
+  );
+};
 const styles=StyleSheet.create({
     mainContainer:{
       width:"100%",
-      height:"100%",
+      height:"50%",
       display:"flex",
       justifyContent:"center",
       alignItems:"center"
@@ -100,7 +101,7 @@ const styles=StyleSheet.create({
       alignSelf:"center",
       lineHeight:25,
     },
-    txt:{
+   buttonText:{
       fontSize:27,
       marginBottom:5,
       lineHeight:25,

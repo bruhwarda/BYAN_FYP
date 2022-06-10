@@ -4,10 +4,10 @@ const Furniture = ({navigation}) => {
   
   
   const others=()=>{
-    navigation.navigate("image");
+    navigation.navigate("image ");
   }
   const bedroom=()=>{
-    navigation.navigate("image");
+    navigation.navigate(" image ");
   }
   
     return (
@@ -32,7 +32,7 @@ const Furniture = ({navigation}) => {
      onPress={() => others()} >
      <Image style={styles.welcomeImage}
      source={require("../../assets/bed.jpg")}/> 
-    <Text tyle={styles.buttonText}>
+    <Text style={styles.buttonText}>
       others
       </Text>
     </TouchableOpacity>
@@ -51,7 +51,7 @@ const Furniture = ({navigation}) => {
      onPress={() => bedroom()} >
      <Image style={styles.welcomeImage}
      source={require("../../assets/sofa.jpg")}/> 
-    <Text tyle={styles.buttonText}>
+    <Text style={styles.buttonText}>
  bedroom
       </Text>
     </TouchableOpacity>

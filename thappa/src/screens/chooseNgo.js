@@ -6,9 +6,9 @@ import {
   TouchableOpacity,
   TextInput,
   Dimensions,
-  Alert,
+  Alert
 } from "react-native";
-const { width, height } = Dimensions.get("screen");
+const { width } = Dimensions.get("screen");
 const ChooseNgo = ({ navigation }) => {
   const [pickerValue, setPickerValue] = useState("");
   const [productName, setProductName] = useState("");

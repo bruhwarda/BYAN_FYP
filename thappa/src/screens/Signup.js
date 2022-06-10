@@ -1,17 +1,22 @@
 import React,{useState} from "react";
 import { Text,StyleSheet,View, TextInput,TouchableOpacity, Alert} from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import firebase from 'firebase/app';
+import "firebase/auth";
 const SignUp= ({navigation}) =>{
-const[userName,setUserName]=useState("");
+
+
+
+{/*const[userName,setUserName]=useState("");
 const[userPassword,setUserPassword]=useState("");
- 
-  const submit=()=>{
-  
-  if(userName !=" " && userPassword !=" "){
-    Alert.alert(`thanks ${userName}`);
-  navigation.navigate("Login");
-      }
-  };
+
+const submit=()=>{
+
+if(userName !=" " && userPassword !=" "){
+  Alert.alert(`thanks ${userName}`);
+navigation.navigate("Login");
+    }
+};*/}
   return (
 <View style={styles.mainContainer}>
 <View style={{flexDirection:"row",alignSelf:"center"}}>
@@ -19,22 +24,21 @@ const[userPassword,setUserPassword]=useState("");
 </View>
 <Text style={styles.description}>You can reach us anytime via @gmail.com</Text>
   <View style={styles.inputContainer}>
-<Text style={styles.label}>Enter your name</Text>
+<Text style={styles.labels}>Enter your name</Text>
   <TextInput  style={styles.inputStyle}
 autoCapitalize="none" 
 autoCorrect={false}
-value={userName}
-onChangeText={(actualData)=>setUserName(actualData)}
+secureTextEntry={true}  
+onChangeText={text => handleChange(text, "pwd")}
 />
 </View>
 <View style={styles.inputContainer}>
-<Text style={styles.label}>Enter your password</Text>
+<Text style={styles.labels}>Enter your password</Text>
  <TextInput  style={styles.inputStyle}
 autoCapitalize="none"  
 autoCorrect={false}
 SecureTextEntry={true}
-value={userPassword}
-onChangeText={(actualData)=>setUserPassword(actualData)}
+onChangeText={text => handleChange(text, "pwd2")}
 />
 </View >
 
@@ -46,7 +50,9 @@ backgroundColor: agree ? "#4630EB" :"grey" ,
 },
 ]}
  
-  onPress={() => submit()} >
+  onPress={() => {
+    
+  }} >
 <Text tyle={styles.buttonText}>
     SignUp
   </Text>
@@ -112,4 +118,4 @@ inputStyle:{
       
     },
 })
-export default Signup;
+export default SignUp;
